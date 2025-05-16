@@ -1,53 +1,112 @@
-# Academic Project Page Template
-This is an academic paper project page template.
+# EM generalist: A Physics-Driven Diffusion Foundation Model for Electron Microscopy
+
+## Overview
+
+EM generalist is a cutting-edge diffusion-based foundation model designed to revolutionize electron microscopy (EM) and volumetric EM (vEM) image processing. Our physics-driven approach leverages over 1.7 million EM/vEM images to provide zero-shot solutions for diverse imaging challenges.
+
+## Key Features
+
+✔ **Multi-task Solution**  
+- Denoising
+- 2D Super-resolution reconstruction
+- Deblurring
+- 3D isotropic volume reconstruction
+
+✔ **Technical Advantages**  
+- Zero-shot reconstruction (no paired training needed)
+- A unified solution for all tasks
+- A foundation model for omni-sample type scanning elecron microscopy (SEM) data
+
+## Usage Options
+- The well-trained model weights can be downloaded at https://huggingface.co/10cbvkw/EM_generalist
+
+### 🌐 Online Demo (Recommended)
+For most users, we recommend our web platform:
+🔗 [generativemicroscope.com](https://generativemicroscope.com)  
+✅ No installation required  
+✅ User-friendly interface  
+
+### 💻 Local Deployment
+This repository provides resources for:
+1. Local deployment
+2. Model training
+3. Physical model embedding
 
 
-Example project pages built using this template are:
-- https://horwitz.ai/probex
-- https://vision.huji.ac.il/probegen
-- https://horwitz.ai/mother
-- https://horwitz.ai/spectral_detuning
-- https://vision.huji.ac.il/ladeda
-- https://vision.huji.ac.il/dsire
-- https://horwitz.ai/podd
-- https://dreamix-video-editing.github.io
-- https://horwitz.ai/conffusion
-- https://horwitz.ai/3d_ads/
-- https://vision.huji.ac.il/ssrl_ad
-- https://vision.huji.ac.il/deepsim
+# EM Generalist Web Application – User Guide
 
+This web application provides a zero-shot solution for electron microscopy and volume electron microscopy (vEM) image restoration, supporting multiple tasks such as denoising, deblurring, and 2D/3D super-resolution using a unified diffusion-based foundation model.
 
+## 1. Job Submission Interface
 
-## Start using the template
-To start using the template click on `Use this Template`.
+After visiting [generativemicroscope.com](https://generativemicroscope.com), users will be redirected to the application interface.
+Due to sleep-based deployment, please note that the **first launch may take up to one minute** to activate the backend service. Once initialized, the application will operate normally.
 
-The template uses html for controlling the content and css for controlling the style. 
-To edit the websites contents edit the `index.html` file. It contains different HTML "building blocks", use whichever ones you need and comment out the rest.  
+As shown in **Figure 1**, users may upload input images through the left-hand panel of the **Job Submit** tab.
 
-**IMPORTANT!** Make sure to replace the `favicon.ico` under `static/images/` with one of your own, otherwise your favicon is going to be a dreambooth image of me.
+- **Supported file formats:** `.tif`, `.mrc`, `.npy`
+- **Input requirements:** Image data should be single-channel (grayscale) and normalized within the value range **[0, 255]**
 
-## Components
-- Teaser video
-- Images Carousel
-- Youtube embedding
-- Video Carousel
-- PDF Poster
-- Bibtex citation
+Users can:
+- **Drag-and-drop** the file into the upload box  
+- Or **click to open** the file selection dialog  
 
-## Tips:
-- The `index.html` file contains comments instructing you what to replace, you should follow these comments.
-- The `meta` tags in the `index.html` file are used to provide metadata about your paper 
-(e.g. helping search engine index the website, showing a preview image when sharing the website, etc.)
-- The resolution of images and videos can usually be around 1920-2048, there rarely a need for better resolution that take longer to load. 
-- All the images and videos you use should be compressed to allow for fast loading of the website (and thus better indexing by search engines). For images, you can use [TinyPNG](https://tinypng.com), for videos you can need to find the tradeoff between size and quality.
-- When using large video files (larger than 10MB), it's better to use youtube for hosting the video as serving the video from the website can take time.
-- Using a tracker can help you analyze the traffic and see where users came from. [statcounter](https://statcounter.com) is a free, easy to use tracker that takes under 5 minutes to set up. 
-- This project page can also be made into a github pages website.
-- Replace the favicon to one of your choosing (the default one is of the Hebrew University). 
-- Suggestions, improvements and comments are welcome, simply open an issue or contact me. You can find my contact information at [https://horwitz.ai](https://horwitz.ai)
+Once uploaded, the file is ready for task assignment and processing.
 
-## Acknowledgments
-Parts of this project page were adopted from the [Nerfies](https://nerfies.github.io/) page.
+## 2. Using Example Files
 
-## Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+In the **"Example File"** tab (see **Figure 2**), users may directly access a curated set of benchmark image samples:
+
+- These examples reflect the typical test cases used across various publications
+- Each file is named based on its **sample type**, **task category**, and **hyperparameter configuration**, such as:
+  - `denoise_liver_stepsize_0.5.tif`
+  - `2Dsr_x3_stepsize_0.1.tif`
+  - `deblur_sigma_1_stepsize_0.1.tif`
+
+Users can click to download, inspect, and re-upload them to the **Job Submit** tab for trial processing.
+
+## 3. Job Parameters
+
+On the right-hand panel of the **Job Submit** tab is the **Job Parameters** section:
+
+- **Mode**:  
+  Select one of the following tasks:
+  - `denoise`
+  - `deblur`
+  - `super_resolution_2D`
+  - `super_resolution_3D`
+
+- **Stepsize**:  
+  This is the **only hyperparameter** that requires manual tuning. It governs the update magnitude during inference sampling.
+  
+  - Recommended default: **0.3 to 0.5**
+  - If set to `0`, the system will **automatically estimate** a suitable value based on the noise level or degradation type.
+  - For **optimal performance on specific datasets**, it is recommended to **manually tune** this parameter.
+
+Once the file and parameters are set, click **Upload and Process** to submit the task.
+
+## 4. Job Execution and Results
+
+- Processing time varies based on task complexity and image size. In general, each job takes a few minutes (see detailed timing benchmarks in the associated paper).
+- After processing, the restored image appears in the **Submit Result** panel at the bottom.
+- Click the **download icon** on the top-right of the result panel to download the output image.
+
+## 5. Job List and History Tracking
+
+In the **"Job List"** tab (see **Figure 3**), users can track their previously submitted tasks.
+
+- Each entry includes:
+  - **Job ID** (clickable for detailed view)
+  - **Status** (e.g., Finished)
+  - **Create Time** (in UTC+8 format)
+  - **Execution Duration** (hh:mm:ss)
+  
+- During the **review period**, account login is not required — all prior jobs are stored and accessible.
+
+Users may click on the **Job ID** to review both the original and processed image results.
+
+## Acknowledgment
+
+This tool was developed to facilitate reproducibility and accelerate electron microscopy workflows by providing accessible restoration solutions using a generalized diffusion model.
+
+For details on model training, benchmark results, and recommended configurations, please refer to the original publication.
